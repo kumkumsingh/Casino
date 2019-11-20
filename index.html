@@ -7,28 +7,50 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     />
+    <!-- Konva.js - HTML5 2d canvas library for desktop and mobile applications -->
     <script src="https://unpkg.com/konva@4.0.18/konva.min.js"></script>
     <meta charset="utf-8" />
     <title>Wheel of Casino</title>
     <style>
       body {
-        margin: 0;
+        margin: 20px;
         padding: 0;
-        overflow: hidden;
+        /* overflow: hidden; */
         background-color: blueviolet;
       }
+    .styled-select {
+    overflow: hidden;
+    height: 74px;
+    float: right;
+    width: 365px;
+    margin-right: 10px;
+}
     </style>
   </head>
 
   <body>
-    <h1 class="text-center">Wheel Of Casino.....</h1>
-    <select class="float-right" onChange="onChange(this);">
-      <option value="Odd">Odd</option>
-      <option value="Even">Even</option>
-    </select>
+    <div>
+      <h1 class="text-center">Wheel Of Money.....</h1>
+      <h2 class="text-center">Instructions:You can enter the amount you want bet and then guess wheel to stop at odd or even number</h2>
+      <br></br>
+      <h2 class="text-center">Then if your guess is correct your money will multiply with the number where wheel stops</h2>
+    </div>
+    
+    <div>
+      <h1>Bet Amount</h1>
+      <input id="betValue"></input>
+      <!-- style= "width: 200px" -->
+      <!-- class="float-right" -->
+      <br></br>
+      <select onChange="onChange(this);" style= "width: 200px">
+        <option value="Make a Guess">Your Guess</option>
+        <option value="Odd">Odd</option>
+        <option value="Even">Even</option>
+      </select>
+    </div>
     <!-- <div>CREDIT</div> -->
     <p id="priceId"></p>
-    <button id="spin" class="btn-primary">SPIN</button>
+    <button id="spin" class="btn-primary" style= "width: 150px";>SPIN</button>
     <div id="container"></div>
 
     <script>
@@ -65,7 +87,6 @@
         let randIndex = Math.round(Math.random() * 3);
         color[randIndex] = 0;
         return color;
-        console.log("checking color", color);
       }
       function getRandomColor() {
         let r = 100 + Math.round(Math.random() * 55);
@@ -106,6 +127,7 @@
           strokeWidth: 2
         });
         wedge.add(wedgeBackground);
+        //adding the text in the arcs
         let text = new Konva.Text({
           text: reward,
           fontFamily: "Calibri",
@@ -121,7 +143,6 @@
         });
         wedge.add(text);
         text.cache();
-        // wedge.startRotation = wedge.rotation();
         wheel.add(wedge);
       }
       function animate(frame) {
@@ -155,19 +176,20 @@
               let price = text.split("\n").join("");
               if (selectedText.value === "Odd" && parseInt(price) % 2 !== 0) {
                 console.log("selected text inside odd", selectedText.value);
-                document.getElementById("priceId").innerHTML =
-                  "Winning Price is $" + price * 100;
+                const betValue = document.getElementById("betValue").value;
+                alert("Winning Price is $" + parseInt(price) * parseInt(betValue));
               } else if (
                 selectedText.value === "Even" &&
                 parseInt(price) % 2 === 0
               ) {
                 console.log("selected text inside even", selectedText.value);
-                document.getElementById("priceId").innerHTML =
-                  "Winning Price is $" + price * 100;
+                //document.getElementById("priceId").innerHTML =
+                const betValue = document.getElementById("betValue").value;
+                alert("Winning Price is $" + parseInt(price) * parseInt(betValue));
               } else {
                 console.log("selected text inside else", selectedText.value);
-                document.getElementById("priceId").innerHTML =
-                  "Winning Price is $" + "0000";
+                //document.getElementById("priceId").innerHTML =
+                  alert("You Lost");
               }
             }
             finished = true;
@@ -238,40 +260,8 @@
           target = evt.target;
           finished = false;
         });
-        // add listeners to container
-        stage.addEventListener(
-          "mouseup touchend",
-          function() {
-            controlled = false;
-            angularVelocity = getAverageAngularVelocity() * 5;
-            if (angularVelocity > 20) {
-              angularVelocity = 20;
-            } else if (angularVelocity < -20) {
-              angularVelocity = -20;
-            }
-            angularVelocities = [];
-          },
-          false
-        );
-        stage.addEventListener(
-          "mousemove touchmove",
-          function(evt) {
-            var mousePos = stage.getPointerPosition();
-            if (controlled && mousePos && target) {
-              let x = mousePos.x - wheel.getX();
-              let y = mousePos.y - wheel.getY();
-              let atan = Math.atan(y / x);
-              let rotation = x >= 0 ? atan : atan + Math.PI;
-              let targetGroup = target.getParent();
-              wheel.rotation(
-                rotation - targetGroup.startRotation - target.angle() / 2
-              );
-            }
-          },
-          false
-        );
       }
-    
+
       init();
       // });
       document.getElementById("spin").addEventListener("click", function() {
