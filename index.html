@@ -15,36 +15,100 @@
       body {
         margin: 20px;
         padding: 0;
-        background-color: blueviolet;
+        background-color: lightslategray;
+        background-image:url('casinoimg.jpg');
+        background-repeat:no-repeat;
+        background-size: cover;
+        background-blend-mode:soft-light;
       }
+      .wheel{
+        font-size: 50px;
+        margin: 20px;
+        color:black;
+        text-align: center;
+      }
+      .betAmount{
+        font-size: 50px;
+        margin: 5px;   
+        color: black;
+        text-align: center;
+      }
+      .spin{
+        font-size: 50px;
+        margin: 5px; 
+        text-align: center;
+      }
+      .instructions{
+        font-size: 50px;
+        color: rgb(10, 2, 2); 
+        text-align: left;
+      }
+      .highlightme{
+        background-color: lightblue; 
+      }
+      .result{
+        background-color: gold;
+        font-size: 50px;
+        color: rgb(10, 2, 2); 
+        text-align: center;
+      }
+      .grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
 </style>
   </head>
 
   <body>
     <div>
-      <h1 class="text-center">Wheel Of Money.....</h1>
-      <h2 class="text-center">Instructions:You can enter the amount you want bet and then guess wheel to stop at odd or even number</h2>
-      <br></br>
-      <h2 class="text-center">Then if your guess is correct your money will multiply with the number where wheel stops</h2>
+      <h1 class="wheel">
+        <span style="background-color: gold; font-family: cursive ; "> !!! THE WONDER MONEY WHEEL !!!</span>
+      </h1>
     </div>
-    
-    <div>
-      <h1>Bet Amount</h1>
-      <input id="betValue"></input>
-      <br></br>
-      <select onChange="onChange(this);" style= "width: 200px">
-        <option value="Make a Guess">Your Guess</option>
-        <option value="Odd">Odd</option>
-        <option value="Even">Even</option>
-      </select>
-    </div>
-    <p id="priceId"></p>
-    <button id="spin" class="btn-primary" style= "width: 150px";>SPIN</button>
-    <div id="container"></div>
+    <div class="grid-container">
+        <div class="item1"> </div>
+        <div class="item2">
+            <div id="container"></div>
+        </div>
+        <div class="item3">
+            <div class='instructions'>
+                <span class='highlightme'>Instructions:<br>
+                  <br>
+                   Enter the amount you want to bet.  <br> 
+                   <br>
+                   Place your bet on odd/even number. <br>     
+                   <br>
+                   If wheel stops as per your guess <br>
+                   you money doubles !!!
+                </span>
+             </div>
+        </div>      
+      </div>
 
+    <div class='betAmount'>
+        <h1> 
+          <span class='highlightme'>
+             ENTER YOUR AMOUNT BELOW 
+          </span>
+        </h1>
+        <input id="betValue"></input>
+        <div style= "margin: 15px">
+        <select onChange="onChange(this);" style= "width: 550px" >
+          <option value="Make a Guess">MAKE YOUR CHOICE</option>
+          <option value="Odd">Odd</option>
+          <option value="Even">Even</option>
+        </select>
+        </div>
+     </div>
+     <div class='spin'> 
+        <button id="spin" class="btn-primary" style= "width: 150px";>SPIN</button>
+     </div>
+     <div id='amountWon' class='result'> 
+        !!! YOUR RESULT !!! 
+   </div>
     <script>
-      let width = window.innerWidth;
-      let height = window.innerHeight;
+      let width = window.innerWidth *(2/5);
+      let height = window.innerHeight * (3/5);
       Konva.angleDeg = false;
       let angularVelocity = 6;
       let angularVelocities = [];
@@ -165,16 +229,18 @@
               let price = text.split("\n").join("");
               if (selectedText.value === "Odd" && parseInt(price) % 2 !== 0) {
                 console.log("selected text inside odd", selectedText.value);
-                const betValue = document.getElementById("betValue").value;
-                alert("Winning Price is $" + parseInt(price) * parseInt(betValue));
+                let betValue = document.getElementById("betValue").value;
+                document.getElementById("amountWon").innerHTML = "You won $"+(parseInt(betValue)*2);
+                //alert("Winning Price is $" + parseInt(price) * parseInt(betValue));
               } else if (
                 selectedText.value === "Even" &&
                 parseInt(price) % 2 === 0
               ) {
-                const betValue = document.getElementById("betValue").value;
-                alert("Winning Price is $" + parseInt(price) * parseInt(betValue));
+                let betValue = document.getElementById("betValue").value;
+                document.getElementById("amountWon").innerHTML = "You won $"+(parseInt(betValue)*2);
+                //alert("Winning Price is $" + parseInt(price) * parseInt(betValue));
               } else {
-                  alert("You Lost");
+                document.getElementById("amountWon").innerHTML = "!!! Sorry you lost !!!";
               }
             }
             finished = true;
